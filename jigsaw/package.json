@@ -8,5 +8,10 @@
     "clear": "rm -rf *.png"
   },
   "author": "kinglisky",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "sharp": "^0.21.3",
+    "shelljs": "^0.8.3"
+  }
 }
