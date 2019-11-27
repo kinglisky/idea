@@ -7,7 +7,7 @@ const CHUNK_WIDTH = 600
 const CHUNK_HEIGHT = 400
 const CHUNK_PADDING = CHUNK_HEIGHT / 8
 const CHUNK_SIZE = 1
-const IMG_COUNT = 3
+const IMG_COUNT = 20
 const IMG_MAP = {}
 const RANDOM_IMG_API = 'https://img.xjh.me/random_img.php?type=bg&ctype=nature&return=json'
 
