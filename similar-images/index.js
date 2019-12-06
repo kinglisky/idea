@@ -1,7 +1,8 @@
 (function () {
-    const uploadBtn = document.querySelector('#upload');
-    const grayBtn = document.querySelector('#gray');
-    const otsuBtn = document.querySelector('#otsu');
+    const uploadBtn = document.querySelector('#upload-btn');
+    const grayBtn = document.querySelector('#gray-btn');
+    const otsuBtn = document.querySelector('#otsu-btn');
+    const compareBtn = document.querySelector('#compare-btn');
     const originImg1 = document.querySelector('#origin1');
     const originImg2 = document.querySelector('#origin2');
     const grayImg1 = document.querySelector('#gray1');
@@ -58,13 +59,13 @@
         return { canvas, ctx };
     }
 
-    function imageGrayOutput(image, targetWidth = 500) {
+    function imageGrayOutput(image, size = 64) {
         const {
             naturalWidth,
             naturalHeight,
         } = image;
-        const width = targetWidth;
-        const height = Math.round(targetWidth * naturalHeight / naturalWidth);
+        const width = size;
+        const height = size;
         const canvas = createCanvas({ width, height });
         const ctx = canvas.getContext('2d');
         ctx.drawImage(image, 0, 0, naturalWidth, naturalHeight, 0, 0, width, height);
@@ -119,18 +120,20 @@
         const { width, height, data } = imgData;
         const canvas = createCanvas({ width, height });
         const ctx = canvas.getContext('2d');
+        const hash = [];
         for (let x = 0; x < width; x++) {
             for (let y = 0; y < height; y++) {
                 const idx = (x + y * canvas.width) * 4;
-                const v = data[idx + 0] > threshold ? 0 : 255;
+                const v = data[idx + 0] > threshold ? 255 : 0;
                 data[idx] = v;
                 data[idx + 1] = v;
                 data[idx + 2] = v;
+                hash.push(v > 0 ? 1 : 0);
                 // data[idx + 3] = data[idx + 3];
             }
         }
         ctx.putImageData(imgData, 0, 0);
-        return { canvas, ctx };
+        return { canvas, ctx, hash };
     }
 
     uploadBtn.addEventListener('change', (event) => {
@@ -153,6 +156,9 @@
 
     }, false);
 
+    let otsu1 = null;
+    let otsu2 = null;
+
     otsuBtn.addEventListener('click', () => {
         const imgData1 = gray1.ctx.getImageData(0, 0, gray1.canvas.width, gray1.canvas.height);
         const imgData2 = gray2.ctx.getImageData(0, 0, gray1.canvas.width, gray1.canvas.height);
@@ -163,12 +169,29 @@
         console.log('图片 1 阈值', threshold1);
         console.log('图片 2 阈值', threshold2);
 
-        const otsu1 = imageOtsuOutput(imgData1, threshold1);
-        const otsu2 = imageOtsuOutput(imgData2, threshold2);
+        otsu1 = imageOtsuOutput(imgData1, threshold1);
+        otsu2 = imageOtsuOutput(imgData2, threshold2);
 
         updateOtsuImages([
             otsu1.canvas.toDataURL(),
             otsu2.canvas.toDataURL(),
         ]);
+    }, false);
+
+    compareBtn.addEventListener('click', () => {
+        const { hash: hash1 }  = otsu1;
+        const { hash: hash2 }  = otsu2;
+        console.log('图片 1 hash 值', hash1);
+        console.log('图片 2 hahs 值', hash2);
+
+        let diff = 0;
+        const total = hash2.length;
+        hash2.forEach((v, i) => {
+            diff += v === hash1[i] ? 0 : 1;
+        });
+        console.log({ diff, total });
+        const percent = (1- diff / total) * 100;
+
+        alert(`图片相识度为：${percent}%`);
     }, false);
 })()
