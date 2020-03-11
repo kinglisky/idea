@@ -63,14 +63,38 @@
         font-size: 32px;
         cursor: pointer;
     }
+
+    .play {
+        display: block;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 80px;
+        font-size: 32px;
+        border: 1px solid #000;
+        background: #fff;
+    }
 </style>
 
 <body>
     <section class="wrap">
         <div class="inner">
             <div class="shell">
-                <video class="content" muted autoplay loop preload="auto" playsInline playsinline
-                    webkit-playsinline="true" mtt-playsinline="true" width="600" height="338px" src="https://erii.oss-cn-beijing.aliyuncs.com/v1.mp4">
+                <video
+                    class="content"
+                    muted
+                    loop
+                    preload="auto"
+                    playsInline
+                    playsinline
+                    webkit-playsinline="true"
+                    mtt-playsinline="true"
+                    x5-video-player-type="h5"
+                    width="600"
+                    height="338px"
+                    src="http://erii.oss-cn-beijing.aliyuncs.com/v1.mp4"
+                >
                 </video>
             </div>
             <div class="mask">
@@ -78,11 +102,12 @@
             </div>
         </div>
     </section>
-
+    <button class="play">PLAY</button>
     <script>
         (function () {
             var mask = document.querySelector('.mask');
             var video = document.querySelector('.content');
+            var playBtn = document.querySelector('.play');
 
             function info(msg) {
                 mask.innerText = msg;
@@ -103,11 +128,12 @@
 
             video.addEventListener('loadeddata', () => {
                 info('点击播放');
-                mask.addEventListener('click', play, false);
-                mask.addEventListener('tap', play, false);
+                playBtn.addEventListener('click', play, false);
+                playBtn.addEventListener('tap', play, false);
             }, false);
 
-            video.addEventListener('error', () => {
+            video.addEventListener('error', (err) => {
+                console.log(err);
                 info('出错了');
             });
         })();
