@@ -59,7 +59,7 @@
         return { canvas, ctx };
     }
 
-    function imageGrayOutput(image, size = 64) {
+    function imageGrayOutput(image, size = 120) {
         const {
             naturalWidth,
             naturalHeight,
