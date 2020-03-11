@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0,viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>视频播放</title>
 </head>
 <style>
@@ -69,18 +69,18 @@
     <section class="wrap">
         <div class="inner">
             <div class="shell">
-                <video class="content" muted autoplay loop preload="auto" playsInline playsinline webkit-playsinline="true"
-                    mtt-playsinline="true" width="600" height="338px" src="https://erii.oss-cn-beijing.aliyuncs.com/v1.mp4">
+                <video class="content" muted autoplay loop preload="auto" playsInline playsinline
+                    webkit-playsinline="true" mtt-playsinline="true" width="600" height="338px" src="https://erii.oss-cn-beijing.aliyuncs.com/v1.mp4">
                 </video>
             </div>
             <div class="mask">
-                点击触发播放
+                LOADING...
             </div>
         </div>
     </section>
 
     <script>
-        window.addEventListener('load', () => {
+        (function () {
             var mask = document.querySelector('.mask');
             var video = document.querySelector('.content');
 
@@ -90,7 +90,6 @@
 
             function play() {
                 info('TRY PLAY');
-                alert('TRY PLAY');
                 try {
                     video.play().then(() => {
                         info('PLAY SUCCESS');
@@ -107,7 +106,11 @@
                 mask.addEventListener('click', play, false);
                 mask.addEventListener('tap', play, false);
             }, false);
-        });
+
+            video.addEventListener('error', () => {
+                info('出错了');
+            });
+        })();
     </script>
 </body>
 
