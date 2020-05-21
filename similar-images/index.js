@@ -1,6 +1,7 @@
 (function () {
     const uploadBtn = document.querySelector('#upload-btn');
     const grayBtn = document.querySelector('#gray-btn');
+    const averageBtn = document.querySelector('#average-btn');
     const otsuBtn = document.querySelector('#otsu-btn');
     const compareBtn = document.querySelector('#compare-btn');
     const originImg1 = document.querySelector('#origin1');
@@ -9,6 +10,8 @@
     const grayImg2 = document.querySelector('#gray2');
     const otsuImg1 = document.querySelector('#otsu1');
     const otsuImg2 = document.querySelector('#otsu2');
+
+    const OUTPUT_SIZE = 32;
 
     function updateOrignImages([url1, url2]) {
         originImg1.src = url1;
@@ -20,7 +23,7 @@
         grayImg2.src = url2;
     }
 
-    function updateOtsuImages([url1, url2]) {
+    function updateBinaryzationImages([url1, url2]) {
         otsuImg1.src = url1;
         otsuImg2.src = url2;
     }
@@ -59,7 +62,7 @@
         return { canvas, ctx };
     }
 
-    function imageGrayOutput(image, size = 64) {
+    function imageGrayOutput(image, size = OUTPUT_SIZE) {
         const {
             naturalWidth,
             naturalHeight,
@@ -116,7 +119,19 @@
         return threshold
     }
 
-    function imageOtsuOutput(imgData, threshold) {
+    function average(grayData) {
+        let sum = 0;
+        for (let i = 0; i < grayData.length - 1; i += 4) {
+            const r = grayData[i];
+            const g = grayData[i + 1];
+            const b = grayData[i + 2];
+            sum += r + g + b;
+        }
+
+        return Math.round(sum / grayData.length);
+    }
+
+    function imageBinaryzationOutput(imgData, threshold) {
         const { width, height, data } = imgData;
         const canvas = createCanvas({ width, height });
         const ctx = canvas.getContext('2d');
@@ -156,8 +171,27 @@
 
     }, false);
 
-    let otsu1 = null;
-    let otsu2 = null;
+    let binaryzation1 = null;
+    let binaryzation2 = null;
+
+    averageBtn.addEventListener('click', () => {
+        const imgData1 = gray1.ctx.getImageData(0, 0, gray1.canvas.width, gray1.canvas.height);
+        const imgData2 = gray2.ctx.getImageData(0, 0, gray1.canvas.width, gray1.canvas.height);
+        
+        const threshold1 = average(imgData1.data);
+        const threshold2 = average(imgData2.data);
+
+        console.log('average 图片 1 阈值', threshold1);
+        console.log('average 图片 2 阈值', threshold2);
+
+        binaryzation1 = imageBinaryzationOutput(imgData1, threshold1);
+        binaryzation2 = imageBinaryzationOutput(imgData2, threshold2);
+
+        updateBinaryzationImages([
+            binaryzation1.canvas.toDataURL(),
+            binaryzation2.canvas.toDataURL(),
+        ]);
+    });
 
     otsuBtn.addEventListener('click', () => {
         const imgData1 = gray1.ctx.getImageData(0, 0, gray1.canvas.width, gray1.canvas.height);
@@ -166,21 +200,21 @@
         const threshold1 = otsu(imgData1.data);
         const threshold2 = otsu(imgData2.data);
 
-        console.log('图片 1 阈值', threshold1);
-        console.log('图片 2 阈值', threshold2);
+        console.log('otsu 图片 1 阈值', threshold1);
+        console.log('otsu 图片 2 阈值', threshold2);
 
-        otsu1 = imageOtsuOutput(imgData1, threshold1);
-        otsu2 = imageOtsuOutput(imgData2, threshold2);
+        binaryzation1 = imageBinaryzationOutput(imgData1, threshold1);
+        binaryzation2 = imageBinaryzationOutput(imgData2, threshold2);
 
-        updateOtsuImages([
-            otsu1.canvas.toDataURL(),
-            otsu2.canvas.toDataURL(),
+        updateBinaryzationImages([
+            binaryzation1.canvas.toDataURL(),
+            binaryzation2.canvas.toDataURL(),
         ]);
     }, false);
 
     compareBtn.addEventListener('click', () => {
-        const { hash: hash1 }  = otsu1;
-        const { hash: hash2 }  = otsu2;
+        const { hash: hash1 }  = binaryzation1;
+        const { hash: hash2 }  = binaryzation2;
         console.log('图片 1 hash 值', hash1);
         console.log('图片 2 hahs 值', hash2);
 
