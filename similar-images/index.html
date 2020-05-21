@@ -18,6 +18,7 @@
         overflow-y: auto;
         width: 100vw;
         height: 100vh;
+        overflow-x: hidden;
     }
 
     .tools {
@@ -89,6 +90,13 @@
     .images__item:last-child {
         margin-left: 20px;
     }
+
+    #info-output {
+        padding: 24px;
+        text-align: center;
+        font-size: 24px;
+        color: #f00;
+    }
 </style>
 
 <body>
@@ -131,6 +139,7 @@
             <img src="./images/link.jpg" id="otsu2">
         </div>
     </section>
+    <h1 class="title" id="info-output">相似度：</h1>
     <script src="./index.js"></script>
 </body>
 

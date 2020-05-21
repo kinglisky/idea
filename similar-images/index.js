@@ -10,6 +10,7 @@
     const grayImg2 = document.querySelector('#gray2');
     const otsuImg1 = document.querySelector('#otsu1');
     const otsuImg2 = document.querySelector('#otsu2');
+    const infoOutput = document.querySelector('#info-output');
 
     const OUTPUT_SIZE = 32;
 
@@ -226,6 +227,6 @@
         console.log({ diff, total });
         const percent = (1- diff / total) * 100;
 
-        alert(`图片相识度为：${percent}%`);
+        infoOutput.innerText = `图片相识度为：${percent}%`;
     }, false);
 })()
