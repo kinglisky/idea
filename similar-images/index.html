@@ -18,6 +18,7 @@
         overflow-y: auto;
         width: 100vw;
         height: 100vh;
+        overflow-x: hidden;
     }
 
     .tools {
@@ -55,6 +56,11 @@
         opacity: 0;
     }
 
+    .title {
+        padding: 0 24px;
+        font-size: 18px;
+    }
+
     .images {
         display: flex;
         justify-content: space-between;
@@ -84,6 +90,13 @@
     .images__item:last-child {
         margin-left: 20px;
     }
+
+    #info-output {
+        padding: 24px;
+        text-align: center;
+        font-size: 24px;
+        color: #f00;
+    }
 </style>
 
 <body>
@@ -93,36 +106,40 @@
             <input id="upload-btn" multiple type="file" accept="image/*">
         </button>
         <button class="btn" id="gray-btn">灰度化</button>
-        <button class="btn" id="otsu-btn">二值化</button>
+        <button class="btn" id="average-btn">average 二值化</button>
+        <button class="btn" id="otsu-btn">Otsu 二值化</button>
         <button class="btn" id="compare-btn">对比</button>
     </div>
 
+    <h1 class="title">原图：</h1>
     <section class="images">
         <div class="images__item">
-            <img src="./temp.png" id="origin1">
+            <img src="./images/link.jpg" id="origin1">
         </div>
         <div class="images__item">
-            <img src="./temp.png" id="origin2">
+            <img src="./images/link.jpg" id="origin2">
         </div>
     </section>
 
+    <h1 class="title">灰度化：</h1>
     <section class="images">
         <div class="images__item">
-            <img src="./temp.png" id="gray1">
+            <img src="./images/link.jpg" id="gray1">
         </div>
         <div class="images__item">
-            <img src="./temp.png" id="gray2">
+            <img src="./images/link.jpg" id="gray2">
         </div>
     </section>
-
+    <h1 class="title">二值化：</h1>
     <section class="images">
         <div class="images__item">
-            <img src="./temp.png" id="otsu1">
+            <img src="./images/link.jpg" id="otsu1">
         </div>
         <div class="images__item">
-            <img src="./temp.png" id="otsu2">
+            <img src="./images/link.jpg" id="otsu2">
         </div>
     </section>
+    <h1 class="title" id="info-output">相似度：</h1>
     <script src="./index.js"></script>
 </body>
 
