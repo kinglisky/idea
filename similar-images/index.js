@@ -12,7 +12,7 @@
     const otsuImg2 = document.querySelector('#otsu2');
     const infoOutput = document.querySelector('#info-output');
 
-    const OUTPUT_SIZE = 32;
+    const OUTPUT_SIZE = 8;
 
     function updateOrignImages([url1, url2]) {
         originImg1.src = url1;
