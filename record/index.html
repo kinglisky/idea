@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>document</title>
+</head>
+
+<body>
+    <button>获取屏幕</button>
+    <video id="video" autoplay width="800" height="600"></video>
+
+</body>
+<script type="text/javascript">
+
+    var video = document.getElementsByTagName('video')[0];
+    var btn = document.getElementsByTagName('button')[0];
+
+    btn.onclick = function () {
+
+        navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: false
+        }).then(stream => {
+            video.srcObject = stream;
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+
+</script>
+
+</html>
